@@ -1,3 +1,5 @@
 name: RegenBlock
 version: '${version}'
 main: io.github.jung27.regenblock.RegenBlock
+commands:
+  regenblock:

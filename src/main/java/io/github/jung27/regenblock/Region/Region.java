@@ -64,9 +64,10 @@ public class Region{
     }
 
     public boolean isInside(Location location) {
-        return location.getX() >= startLocation.getX() && location.getX() <= endLocation.getX() &&
-                location.getY() >= startLocation.getY() && location.getY() <= endLocation.getY() &&
-                location.getZ() >= startLocation.getZ() && location.getZ() <= endLocation.getZ();
+        return location.getWorld().equals(startLocation.getWorld()) &&
+                location.getX() >= Math.min(startLocation.getX(), endLocation.getX()) && location.getX() <= Math.max(startLocation.getX(), endLocation.getX()) &&
+                location.getY() >= Math.min(startLocation.getY(), endLocation.getY()) && location.getY() <= Math.max(startLocation.getY(), endLocation.getY()) &&
+                location.getZ() >= Math.min(startLocation.getZ(), endLocation.getZ()) && location.getZ() <= Math.max(startLocation.getZ(), endLocation.getZ());
     }
 
     public static Region getRegion(String id) {

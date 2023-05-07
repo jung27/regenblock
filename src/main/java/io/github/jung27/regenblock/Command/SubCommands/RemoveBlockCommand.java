@@ -10,7 +10,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+
 
 public class RemoveBlockCommand extends SubCommand {
     @Override
@@ -30,6 +32,11 @@ public class RemoveBlockCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
+        if(args.length != 2) {
+            player.sendMessage("사용법: " + getSyntax());
+            return;
+        }
+
         Inventory inv = Bukkit.createInventory(new RemoveBlockHolder(), 54, "블럭 제거: " + args[1]);
         Region region = Region.getRegion(args[1]);
         if(region == null) {
@@ -42,9 +49,7 @@ public class RemoveBlockCommand extends SubCommand {
 
             ItemStack item = new ItemStack(material);
             ItemMeta meta = item.getItemMeta();
-            List<String> lore = meta.getLore();
-            lore.add("빈도: " + region.getFrequency(material));
-            meta.setLore(lore);
+            meta.setLore(Collections.singletonList("빈도: " + region.getFrequency(material)));
             item.setItemMeta(meta);
 
             inv.addItem(item);

@@ -9,10 +9,15 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -33,10 +38,12 @@ public class RegenBlockEventListener implements Listener {
         Location blockLocation = event.getBlock().getLocation();
 
         //좌표 지정
-        if(!AppointingPlayers.containsKey(event.getPlayer().getUniqueId())) return;
+        if(AppointingPlayers.containsKey(event.getPlayer().getUniqueId())) {
 
-        event.setCancelled(true);
-        AppointLocation(event.getPlayer(), blockLocation, 0);
+            event.setCancelled(true);
+            AppointLocation(event.getPlayer(), blockLocation, 0);
+
+        }
 
         //블럭 리젠
         for (Region region : Region.regions) {
@@ -49,7 +56,10 @@ public class RegenBlockEventListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if(!AppointingPlayers.containsKey(event.getPlayer().getUniqueId()) || !event.hasBlock()) return;
+        if(!AppointingPlayers.containsKey(event.getPlayer().getUniqueId()) || !event.hasBlock() ||
+                event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR ||
+                event.getAction() == Action.RIGHT_CLICK_AIR
+        ) return;
 
         event.setCancelled(true);
         AppointLocation(event.getPlayer(), event.getClickedBlock().getLocation(), 1);
@@ -57,14 +67,27 @@ public class RegenBlockEventListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if(event.getClickedInventory().getHolder() instanceof RemoveBlockHolder){
-            String id = event.getClickedInventory().getTitle().replace("블럭 제거: ", "");
+        Inventory inventory = event.getClickedInventory();
+        if(inventory.getHolder() instanceof RemoveBlockHolder){
+            String id = inventory.getTitle().replace("블럭 제거: ", "");
             Region region = Region.getRegion(id);
             if(region == null) return;
 
             event.setCancelled(true);
             Material material = event.getCurrentItem().getType();
             region.removeBlock(material);
+
+            inventory.clear();
+            Material[] materials = region.getMaterials();
+            for(Material m : materials) {
+
+                ItemStack item = new ItemStack(m);
+                ItemMeta meta = item.getItemMeta();
+                meta.setLore(Collections.singletonList("빈도: " + region.getFrequency(m)));
+                item.setItemMeta(meta);
+
+                inventory.addItem(item);
+            }
         }
     }
 
@@ -78,6 +101,7 @@ public class RegenBlockEventListener implements Listener {
             } else{
                 Location[] locations = new Location[2];
                 locations[index] = location;
+                System.out.println(locations[0] + " " + locations[1]);
                 AppointingLocations.put(uuid, locations);
             }
         } catch (ArrayIndexOutOfBoundsException e){
@@ -90,6 +114,7 @@ public class RegenBlockEventListener implements Listener {
             player.sendMessage("좌표가 정상적으로 지정되었습니다.");
             createRegion(player, AppointingPlayers.get(uuid));
             removeAppointingPlayer(player);
+            AppointingLocations.remove(uuid);
         }
     }
 

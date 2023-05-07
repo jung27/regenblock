@@ -22,6 +22,11 @@ public class AppointCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
+        if(args.length != 2) {
+            player.sendMessage("사용법: " + getSyntax());
+            return;
+        }
+
         player.sendMessage("좌클릭과 우클릭으로 두 지점을 지정해주세요.");
 
         RegenBlock.instance().getRegenBlockEventListener().addAppointingPlayer(player, args[1]);

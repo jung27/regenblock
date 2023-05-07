@@ -29,7 +29,7 @@ public class AddBlockCommand extends SubCommand {
         }
 
         Material material = player.getInventory().getItemInMainHand().getType();
-        if(!material.isBlock()) {
+        if(material == null || !material.isBlock()) {
             player.sendMessage("블럭을 들고 있어야 합니다.");
             return;
         }
