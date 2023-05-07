@@ -1,12 +1,16 @@
 package io.github.jung27.regenblock.Command.SubCommands;
 
 import io.github.jung27.regenblock.Command.SubCommand;
+import io.github.jung27.regenblock.InvetoryHolder.RemoveBlockHolder;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.List;
 
 public class RemoveBlockCommand extends SubCommand {
     @Override
@@ -26,7 +30,7 @@ public class RemoveBlockCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        Inventory inv = Bukkit.createInventory(null, 54, "블럭 제거");
+        Inventory inv = Bukkit.createInventory(new RemoveBlockHolder(), 54, "블럭 제거: " + args[1]);
         Region region = Region.getRegion(args[1]);
         if(region == null) {
             player.sendMessage("해당 id의 지역이 존재하지 않습니다.");
@@ -35,7 +39,15 @@ public class RemoveBlockCommand extends SubCommand {
 
         Material[] materials = region.getMaterials();
         for(Material material : materials) {
-            inv.addItem(new ItemStack(material));
+
+            ItemStack item = new ItemStack(material);
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = meta.getLore();
+            lore.add("빈도: " + region.getFrequency(material));
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+
+            inv.addItem(item);
         }
 
         player.openInventory(inv);

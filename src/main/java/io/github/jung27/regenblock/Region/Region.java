@@ -52,9 +52,15 @@ public class Region{
         }
         return Material.AIR;
     }
+    public int getFrequency(Material material) {
+        return frequencies.get(material);
+    }
 
     public void addBlock(Material material, int frequency) {
         frequencies.put(material, frequency);
+    }
+    public void removeBlock(Material material) {
+        frequencies.remove(material);
     }
 
     public boolean isInside(Location location) {

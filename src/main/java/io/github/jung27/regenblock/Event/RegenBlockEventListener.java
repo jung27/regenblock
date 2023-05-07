@@ -1,13 +1,17 @@
 package io.github.jung27.regenblock.Event;
 
+import com.sun.istack.internal.NotNull;
+import io.github.jung27.regenblock.InvetoryHolder.RemoveBlockHolder;
 import io.github.jung27.regenblock.RegenBlock;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.HashMap;
@@ -50,6 +54,19 @@ public class RegenBlockEventListener implements Listener {
 
         event.setCancelled(true);
         AppointLocation(event.getPlayer(), event.getClickedBlock().getLocation(), 1);
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if(event.getClickedInventory().getHolder() instanceof RemoveBlockHolder){
+            String id = event.getClickedInventory().getTitle().replace("블럭 제거: ", "");
+            Region region = Region.getRegion(id);
+            if(region == null) return;
+
+            event.setCancelled(true);
+            Material material = event.getCurrentItem().getType();
+            region.removeBlock(material);
+        }
     }
 
     //좌표 지정 함수
