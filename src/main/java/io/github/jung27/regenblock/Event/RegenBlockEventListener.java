@@ -1,6 +1,5 @@
 package io.github.jung27.regenblock.Event;
 
-import com.sun.istack.internal.NotNull;
 import io.github.jung27.regenblock.InvetoryHolder.RemoveBlockHolder;
 import io.github.jung27.regenblock.RegenBlock;
 import io.github.jung27.regenblock.Region.Region;
