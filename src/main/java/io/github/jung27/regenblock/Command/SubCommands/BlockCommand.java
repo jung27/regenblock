@@ -10,24 +10,23 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 
-public class RemoveBlockCommand extends SubCommand {
+public class BlockCommand extends SubCommand {
     @Override
     public String getName() {
-        return "removeblock";
+        return "block";
     }
 
     @Override
     public String getDescription() {
-        return "해당 지역의 출현 블럭을 제거합니다.";
+        return "해당 지역의 출현 블럭을 편집합니다.";
     }
 
     @Override
     public String getSyntax() {
-        return "/regenblock removeblock <id>";
+        return "/regenblock block <id>";
     }
 
     @Override
@@ -37,7 +36,7 @@ public class RemoveBlockCommand extends SubCommand {
             return;
         }
 
-        Inventory inv = Bukkit.createInventory(new RemoveBlockHolder(), 54, "블럭 제거: " + args[1]);
+        Inventory inv = Bukkit.createInventory(new RemoveBlockHolder(), 54, "블럭 편집: " + args[1]);
         Region region = Region.getRegion(args[1]);
         if(region == null) {
             player.sendMessage("해당 id의 지역이 존재하지 않습니다.");
