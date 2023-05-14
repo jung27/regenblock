@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -41,17 +42,17 @@ public class RegenBlockEventListener implements Listener {
         if(AppointingPlayers.containsKey(event.getPlayer().getUniqueId())) {
 
             event.setCancelled(true);
-            AppointLocation(event.getPlayer(), blockLocation, 0);
+            appointLocation(event.getPlayer(), blockLocation, 0);
 
         }
 
         //블럭 리젠
-        for (Region region : Region.regions) {
-            if (region.isInside(blockLocation)) {
-                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> blockLocation.getBlock().setType(region.getMaterial()), 40);
-                return;
-            }
-        }
+        regenBlock(blockLocation);
+    }
+
+    @EventHandler
+    public void  onBlockExplode(BlockExplodeEvent event) {
+        regenBlock(event.getBlock().getLocation());
     }
 
     @EventHandler
@@ -62,7 +63,7 @@ public class RegenBlockEventListener implements Listener {
         ) return;
 
         event.setCancelled(true);
-        AppointLocation(event.getPlayer(), event.getClickedBlock().getLocation(), 1);
+        appointLocation(event.getPlayer(), event.getClickedBlock().getLocation(), 1);
     }
 
     @EventHandler
@@ -90,9 +91,16 @@ public class RegenBlockEventListener implements Listener {
             }
         }
     }
-
+    private void regenBlock(Location loc){
+        for (Region region : Region.regions) {
+            if (region.isInside(loc)) {
+                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> loc.getBlock().setType(region.getMaterial()), 40);
+                return;
+            }
+        }
+    }
     //좌표 지정 함수
-    private void AppointLocation(Player player, Location location, int index) {
+    private void appointLocation(Player player, Location location, int index) {
         UUID uuid = player.getUniqueId();
 
         try{
