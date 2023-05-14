@@ -94,7 +94,7 @@ public class RegenBlockEventListener implements Listener {
     private void regenBlock(Location loc){
         for (Region region : Region.regions) {
             if (region.isInside(loc)) {
-                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> loc.getBlock().setType(region.getMaterial()), 40);
+                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> loc.getBlock().setType(region.getMaterial()), region.getRegenDelay());
                 return;
             }
         }

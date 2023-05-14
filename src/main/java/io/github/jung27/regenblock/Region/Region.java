@@ -12,6 +12,7 @@ public class Region{
     private final String id;
     private final HashMap<Material, Integer> frequencies = new HashMap<>();
     public static ArrayList<Region> regions = new ArrayList<>();
+    private Long regenDelay = 0L;
 
     public Region(Location start, Location end, String id) {
         this.startLocation = start;
@@ -68,6 +69,14 @@ public class Region{
                 location.getX() >= Math.min(startLocation.getX(), endLocation.getX()) && location.getX() <= Math.max(startLocation.getX(), endLocation.getX()) &&
                 location.getY() >= Math.min(startLocation.getY(), endLocation.getY()) && location.getY() <= Math.max(startLocation.getY(), endLocation.getY()) &&
                 location.getZ() >= Math.min(startLocation.getZ(), endLocation.getZ()) && location.getZ() <= Math.max(startLocation.getZ(), endLocation.getZ());
+    }
+
+    public Long getRegenDelay() {
+        return regenDelay;
+    }
+
+    public void setRegenDelay(Long regenDelay) {
+        this.regenDelay = regenDelay;
     }
 
     public static Region getRegion(String id) {
