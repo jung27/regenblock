@@ -57,6 +57,10 @@ public class Region{
         return frequencies.get(material);
     }
 
+    public void setFrequency(Material material, int frequency) {
+        frequencies.put(material, frequency);
+    }
+
     public void addBlock(Material material, int frequency) {
         frequencies.put(material, frequency);
     }

@@ -1,6 +1,7 @@
 package io.github.jung27.regenblock.Event;
 
-import io.github.jung27.regenblock.InvetoryHolder.RemoveBlockHolder;
+import com.sun.tools.javac.util.Pair;
+import io.github.jung27.regenblock.InvetoryHolder.BlockHolder;
 import io.github.jung27.regenblock.RegenBlock;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
@@ -12,9 +13,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -24,6 +28,7 @@ import java.util.UUID;
 
 public class RegenBlockEventListener implements Listener {
     private final HashMap<UUID, String> AppointingPlayers = new HashMap<>();
+    private final HashMap<UUID, Pair<String, Material>> playersSettingFre = new HashMap<>();
     private final HashMap<UUID, Location[]> AppointingLocations = new HashMap<>();
 
     public void addAppointingPlayer(Player player, String id) {
@@ -54,6 +59,10 @@ public class RegenBlockEventListener implements Listener {
     public void  onBlockExplode(BlockExplodeEvent event) {
         regenBlock(event.getBlock().getLocation());
     }
+    @EventHandler
+    public void  onDecay(LeavesDecayEvent event) {
+        regenBlock(event.getBlock().getLocation());
+    }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -67,16 +76,69 @@ public class RegenBlockEventListener implements Listener {
     }
 
     @EventHandler
+    public void onChat(AsyncPlayerChatEvent event){
+        Player player = event.getPlayer();
+        String id = playersSettingFre.get(player.getUniqueId()).fst;
+        Material material = playersSettingFre.get(player.getUniqueId()).snd;
+        if(id == null || material == null) return;
+        Region region = Region.getRegion(id);
+        int frequency = Integer.parseInt(event.getMessage());
+
+        if(region == null) {
+            player.sendMessage("해당 id의 지역이 존재하지 않습니다.");
+            return;
+        }
+
+        if(frequency <= 0) {
+            player.sendMessage("빈도는 0보다 커야 합니다.");
+            return;
+        }
+
+        region.setFrequency(material, frequency);
+
+        Inventory inv = Bukkit.createInventory(new BlockHolder(), 54, "블럭 편집: " + id);
+
+        Material[] materials = region.getMaterials();
+        for(Material m : materials) {
+
+            ItemStack item = new ItemStack(m);
+            ItemMeta meta = item.getItemMeta();
+            meta.setLore(Collections.singletonList("빈도: " + region.getFrequency(m)));
+            item.setItemMeta(meta);
+
+            inv.addItem(item);
+        }
+
+        player.openInventory(inv);
+    }
+
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Inventory inventory = event.getClickedInventory();
-        if(inventory.getHolder() instanceof RemoveBlockHolder){
-            String id = inventory.getTitle().replace("블럭 제거: ", "");
+        InventoryView view = event.getView();
+        Inventory inventory = view.getTopInventory();
+        if(inventory.getHolder() instanceof BlockHolder){
+            String id = inventory.getTitle().replace("블럭 편집: ", "");
             Region region = Region.getRegion(id);
             if(region == null) return;
 
             event.setCancelled(true);
             Material material = event.getCurrentItem().getType();
-            region.removeBlock(material);
+            if(event.getClickedInventory() == view.getBottomInventory()){
+                region.addBlock(material, 1);
+            } else{
+                switch (event.getClick()) {
+                    case LEFT:
+                        region.removeBlock(material);
+                        break;
+                    case RIGHT:
+                        playersSettingFre.put(event.getWhoClicked().getUniqueId(), Pair.of(id, material));
+                        event.getWhoClicked().closeInventory();
+                        event.getWhoClicked().sendMessage("블럭의 빈도를 입력해주세요.");
+                        return;
+                    default:
+                        return;
+                }
+            }
 
             inventory.clear();
             Material[] materials = region.getMaterials();

@@ -1,7 +1,7 @@
 package io.github.jung27.regenblock.Command.SubCommands;
 
 import io.github.jung27.regenblock.Command.SubCommand;
-import io.github.jung27.regenblock.InvetoryHolder.RemoveBlockHolder;
+import io.github.jung27.regenblock.InvetoryHolder.BlockHolder;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -36,7 +36,7 @@ public class BlockCommand extends SubCommand {
             return;
         }
 
-        Inventory inv = Bukkit.createInventory(new RemoveBlockHolder(), 54, "블럭 편집: " + args[1]);
+        Inventory inv = Bukkit.createInventory(new BlockHolder(), 54, "블럭 편집: " + args[1]);
         Region region = Region.getRegion(args[1]);
         if(region == null) {
             player.sendMessage("해당 id의 지역이 존재하지 않습니다.");
