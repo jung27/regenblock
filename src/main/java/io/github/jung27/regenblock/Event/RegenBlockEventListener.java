@@ -1,9 +1,9 @@
 package io.github.jung27.regenblock.Event;
 
-import com.sun.tools.javac.util.Pair;
 import io.github.jung27.regenblock.InvetoryHolder.BlockHolder;
 import io.github.jung27.regenblock.RegenBlock;
 import io.github.jung27.regenblock.Region.Region;
+import javafx.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -78,8 +78,8 @@ public class RegenBlockEventListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event){
         Player player = event.getPlayer();
-        String id = playersSettingFre.get(player.getUniqueId()).fst;
-        Material material = playersSettingFre.get(player.getUniqueId()).snd;
+        String id = playersSettingFre.get(player.getUniqueId()).getKey();
+        Material material = playersSettingFre.get(player.getUniqueId()).getValue();
         if(id == null || material == null) return;
         Region region = Region.getRegion(id);
         int frequency = Integer.parseInt(event.getMessage());
@@ -131,7 +131,7 @@ public class RegenBlockEventListener implements Listener {
                         region.removeBlock(material);
                         break;
                     case RIGHT:
-                        playersSettingFre.put(event.getWhoClicked().getUniqueId(), Pair.of(id, material));
+                        playersSettingFre.put(event.getWhoClicked().getUniqueId(), new Pair<>(id, material));
                         event.getWhoClicked().closeInventory();
                         event.getWhoClicked().sendMessage("블럭의 빈도를 입력해주세요.");
                         return;
