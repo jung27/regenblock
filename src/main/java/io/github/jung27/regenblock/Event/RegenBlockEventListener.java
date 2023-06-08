@@ -81,6 +81,7 @@ public class RegenBlockEventListener implements Listener {
         String id = playersSettingFre.get(player.getUniqueId()).getKey();
         Material material = playersSettingFre.get(player.getUniqueId()).getValue();
         if(id == null || material == null) return;
+        event.setCancelled(true);
         Region region = Region.getRegion(id);
         int frequency = Integer.parseInt(event.getMessage());
 
@@ -95,6 +96,7 @@ public class RegenBlockEventListener implements Listener {
         }
 
         region.setFrequency(material, frequency);
+        player.sendMessage(material.name()+"의 빈도가 "+frequency+"(으)로 설정되었습니다.");
 
         Inventory inv = Bukkit.createInventory(new BlockHolder(), 54, "블럭 편집: " + id);
 
@@ -110,6 +112,7 @@ public class RegenBlockEventListener implements Listener {
         }
 
         player.openInventory(inv);
+        playersSettingFre.remove(player.getUniqueId());
     }
 
     @EventHandler
@@ -156,7 +159,9 @@ public class RegenBlockEventListener implements Listener {
     private void regenBlock(Location loc){
         for (Region region : Region.regions) {
             if (region.isInside(loc)) {
-                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> loc.getBlock().setType(region.getMaterial()), region.getRegenDelay());
+                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
+                    loc.getBlock().setType(region.getMaterial());
+                }, region.getRegenDelay());
                 return;
             }
         }
