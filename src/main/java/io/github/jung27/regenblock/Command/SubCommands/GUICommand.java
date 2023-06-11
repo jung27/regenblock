@@ -1,6 +1,8 @@
 package io.github.jung27.regenblock.Command.SubCommands;
 
 import io.github.jung27.regenblock.Command.SubCommand;
+import io.github.jung27.regenblock.GUI.RegenBlockGUI;
+import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.InvetoryHolder.BlockHolder;
 import io.github.jung27.regenblock.RegenBlock;
 import io.github.jung27.regenblock.Region.Region;
@@ -31,18 +33,6 @@ public class GUICommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        Inventory inv = Bukkit.createInventory(new BlockHolder(), 54, "리젠블럭");
-
-        for(Region region : Region.regions) {
-
-            ItemStack item = new ItemStack(Material.PAPER);
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(region.getId());
-            item.setItemMeta(meta);
-
-            inv.addItem(item);
-        }
-
-        player.openInventory(inv);
+        GUIManager.getInstance().openGUI(new RegenBlockGUI(), player);
     }
 }
