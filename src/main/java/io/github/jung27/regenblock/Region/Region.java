@@ -1,5 +1,7 @@
 package io.github.jung27.regenblock.Region;
 
+import io.github.jung27.regenblock.RegenBlock;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -12,7 +14,7 @@ public class Region{
     private final String id;
     private final HashMap<Material, Integer> frequencies = new HashMap<>();
     public static ArrayList<Region> regions = new ArrayList<>();
-    private Long regenDelay = 0L;
+    private Long regenDelay = 20L;
 
     public Region(Location start, Location end, String id) {
         this.startLocation = start;
@@ -90,5 +92,16 @@ public class Region{
             }
         }
         return null;
+    }
+
+    public static void regenBlock(Location loc){
+        for (Region region : regions) {
+            if (region.isInside(loc)) {
+                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
+                    loc.getBlock().setType(region.getMaterial());
+                }, region.getRegenDelay());
+                return;
+            }
+        }
     }
 }

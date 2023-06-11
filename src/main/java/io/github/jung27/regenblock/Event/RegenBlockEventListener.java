@@ -52,16 +52,16 @@ public class RegenBlockEventListener implements Listener {
         }
 
         //블럭 리젠
-        regenBlock(blockLocation);
+        Region.regenBlock(blockLocation);
     }
 
     @EventHandler
     public void  onBlockExplode(BlockExplodeEvent event) {
-        regenBlock(event.getBlock().getLocation());
+        Region.regenBlock(event.getBlock().getLocation());
     }
     @EventHandler
     public void  onDecay(LeavesDecayEvent event) {
-        regenBlock(event.getBlock().getLocation());
+        Region.regenBlock(event.getBlock().getLocation());
     }
 
     @EventHandler
@@ -96,7 +96,7 @@ public class RegenBlockEventListener implements Listener {
         }
 
         region.setFrequency(material, frequency);
-        player.sendMessage(material.name()+"의 빈도가 "+frequency+"(으)로 설정되었습니다.");
+        player.sendMessage(material.name()+"의 빈도가 "+frequency+"(으)로 설정되었습니다!");
 
         Inventory inv = Bukkit.createInventory(new BlockHolder(), 54, "블럭 편집: " + id);
 
@@ -153,16 +153,6 @@ public class RegenBlockEventListener implements Listener {
                 item.setItemMeta(meta);
 
                 inventory.addItem(item);
-            }
-        }
-    }
-    private void regenBlock(Location loc){
-        for (Region region : Region.regions) {
-            if (region.isInside(loc)) {
-                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
-                    loc.getBlock().setType(region.getMaterial());
-                }, region.getRegenDelay());
-                return;
             }
         }
     }
