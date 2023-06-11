@@ -2,6 +2,7 @@ package io.github.jung27.regenblock.Command;
 
 import io.github.jung27.regenblock.Command.SubCommands.AppointCommand;
 import io.github.jung27.regenblock.Command.SubCommands.BlockCommand;
+import io.github.jung27.regenblock.Command.SubCommands.GUICommand;
 import io.github.jung27.regenblock.Command.SubCommands.RemoveCommand;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.command.Command;
@@ -20,6 +21,7 @@ public class RegenBlockCommand implements CommandExecutor, TabCompleter {
         subCommands.add(new AppointCommand());
         subCommands.add(new RemoveCommand());
         subCommands.add(new BlockCommand());
+        subCommands.add(new GUICommand());
     }
 
     @Override
