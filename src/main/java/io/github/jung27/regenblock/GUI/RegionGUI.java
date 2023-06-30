@@ -18,7 +18,7 @@ public class RegionGUI extends InventoryGUI {
     }
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null, 9, "지역 편집");
+        return Bukkit.createInventory(null, 9, "지역 편집: " + region.getId());
     }
 
     @Override

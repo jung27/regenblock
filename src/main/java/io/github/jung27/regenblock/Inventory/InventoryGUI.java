@@ -10,14 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class InventoryGUI implements InventoryHandler{
-    private final Inventory inventory;
+    private Inventory inventory;
     private final Map<Integer, InventoryButton> buttonMap = new HashMap<>();
 
-    public InventoryGUI() {
-        this.inventory = this.createInventory();
-    }
-
     public Inventory getInventory() {
+        if (inventory == null) this.inventory = this.createInventory();
         return inventory;
     }
 
