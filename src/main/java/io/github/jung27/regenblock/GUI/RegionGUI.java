@@ -33,7 +33,7 @@ public class RegionGUI extends InventoryGUI {
                 })
                 .consumer(event -> {
                     player.closeInventory();
-                    GUIManager.getInstance().openGUI(new BlockGUI(), player);
+                    GUIManager.getInstance().openGUI(new BlockGUI(region), player);
                 })
         );
 

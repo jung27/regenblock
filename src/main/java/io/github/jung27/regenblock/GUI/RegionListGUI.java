@@ -43,14 +43,14 @@ public class RegionListGUI extends InventoryGUI {
                 .creator(p -> new ItemStack(Material.ARROW))
                 .consumer(event -> {
                     currentPage--;
-                    decorate(player);
+                    reload(player);
                 }));
 
         if((currentPage+1)*(inventorySize-9) < Region.regions.size()) addButton(inventorySize-1, new InventoryButton()
                 .creator(p -> new ItemStack(Material.ARROW))
                 .consumer(event -> {
                     currentPage++;
-                    decorate(player);
+                    reload(player);
                 }));
 
 

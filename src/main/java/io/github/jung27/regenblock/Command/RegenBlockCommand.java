@@ -1,7 +1,6 @@
 package io.github.jung27.regenblock.Command;
 
 import io.github.jung27.regenblock.Command.SubCommands.AppointCommand;
-import io.github.jung27.regenblock.Command.SubCommands.BlockCommand;
 import io.github.jung27.regenblock.Command.SubCommands.GUICommand;
 import io.github.jung27.regenblock.Command.SubCommands.RemoveCommand;
 import io.github.jung27.regenblock.Region.Region;
@@ -20,7 +19,6 @@ public class RegenBlockCommand implements CommandExecutor, TabCompleter {
     public RegenBlockCommand(){
         subCommands.add(new AppointCommand());
         subCommands.add(new RemoveCommand());
-        subCommands.add(new BlockCommand());
         subCommands.add(new GUICommand());
     }
 
@@ -50,9 +48,7 @@ public class RegenBlockCommand implements CommandExecutor, TabCompleter {
             }
             return subCommandNames;
         } else if(args.length == 2) {
-            if(args[0].equalsIgnoreCase("remove") ||
-                    args[0].equalsIgnoreCase("block")
-            ) {
+            if(args[0].equalsIgnoreCase("remove")) {
                 ArrayList<String> regionIds = new ArrayList<>();
                 for (Region region : Region.regions) {
                     regionIds.add(region.getId());

@@ -6,13 +6,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Region{
     private final Location startLocation;
     private final Location endLocation;
     private final String id;
-    private final HashMap<Material, Integer> frequencies = new HashMap<>();
+    private final LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>();
     public static ArrayList<Region> regions = new ArrayList<>();
     private Long regenDelay = 20L;
 
@@ -35,11 +35,11 @@ public class Region{
     public String getId() {
         return id;
     }
-    public Material[] getMaterials() {
-        return frequencies.keySet().toArray(new Material[0]);
+    public RegenMaterial[] getMaterials() {
+        return frequencies.keySet().toArray(new RegenMaterial[0]);
     }
 
-    public Material getMaterial() {
+    public RegenMaterial getMaterial() {
         int total = 0;
         for (int frequency : frequencies.values()) {
             total += frequency;
@@ -47,26 +47,26 @@ public class Region{
 
         int random = (int) (Math.random() * total);
         int sum = 0;
-        for (Material material : frequencies.keySet()) {
+        for (RegenMaterial material : frequencies.keySet()) {
             sum += frequencies.get(material);
             if (random < sum) {
                 return material;
             }
         }
-        return Material.AIR;
+        return RegenMaterial.get(Material.AIR);
     }
-    public int getFrequency(Material material) {
+    public int getFrequency(RegenMaterial material) {
         return frequencies.get(material);
     }
 
-    public void setFrequency(Material material, int frequency) {
+    public void setFrequency(RegenMaterial material, int frequency) {
         frequencies.put(material, frequency);
     }
 
-    public void addBlock(Material material, int frequency) {
+    public void addBlock(RegenMaterial material, int frequency) {
         frequencies.put(material, frequency);
     }
-    public void removeBlock(Material material) {
+    public void removeBlock(RegenMaterial material) {
         frequencies.remove(material);
     }
 
@@ -98,7 +98,9 @@ public class Region{
         for (Region region : regions) {
             if (region.isInside(loc)) {
                 Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
-                    loc.getBlock().setType(region.getMaterial());
+                    RegenMaterial m = region.getMaterial();
+                    loc.getBlock().setType(m.getMaterial());
+                    loc.getBlock().setData(m.getData());
                 }, region.getRegenDelay());
                 return;
             }

@@ -74,7 +74,7 @@ public class RegenBlockEventListener implements Listener {
 
     @EventHandler
     public void  onBlockExplode(BlockExplodeEvent event) {
-        Region.regenBlock(event.getBlock().getLocation());
+        event.blockList().forEach(block -> Region.regenBlock(block.getLocation()));
     }
     @EventHandler
     public void  onDecay(LeavesDecayEvent event) {
@@ -92,87 +92,6 @@ public class RegenBlockEventListener implements Listener {
         appointLocation(event.getPlayer(), event.getClickedBlock().getLocation(), 1);
     }
 
-//    @EventHandler
-//    public void onChat(AsyncPlayerChatEvent event){
-//        Player player = event.getPlayer();
-//        String id = playersSettingFre.get(player.getUniqueId()).getKey();
-//        Material material = playersSettingFre.get(player.getUniqueId()).getValue();
-//        if(id == null || material == null) return;
-//        event.setCancelled(true);
-//        Region region = Region.getRegion(id);
-//        int frequency = Integer.parseInt(event.getMessage());
-//
-//        if(region == null) {
-//            player.sendMessage("해당 id의 지역이 존재하지 않습니다.");
-//            return;
-//        }
-//
-//        if(frequency <= 0) {
-//            player.sendMessage("빈도는 0보다 커야 합니다.");
-//            return;
-//        }
-//
-//        region.setFrequency(material, frequency);
-//        player.sendMessage(material.name()+"의 빈도가 "+frequency+"(으)로 설정되었습니다!");
-//
-//        Inventory inv = Bukkit.createInventory(new BlockHolder(), 54, "블럭 편집: " + id);
-//
-//        Material[] materials = region.getMaterials();
-//        for(Material m : materials) {
-//
-//            ItemStack item = new ItemStack(m);
-//            ItemMeta meta = item.getItemMeta();
-//            meta.setLore(Collections.singletonList("빈도: " + region.getFrequency(m)));
-//            item.setItemMeta(meta);
-//
-//            inv.addItem(item);
-//        }
-//
-//        player.openInventory(inv);
-//        playersSettingFre.remove(player.getUniqueId());
-//    }
-//
-//    @EventHandler
-//    public void onInventoryClick(InventoryClickEvent event) {
-//        InventoryView view = event.getView();
-//        Inventory inventory = view.getTopInventory();
-//        if(inventory.getHolder() instanceof BlockHolder){
-//            String id = inventory.getTitle().replace("블럭 편집: ", "");
-//            Region region = Region.getRegion(id);
-//            if(region == null) return;
-//
-//            event.setCancelled(true);
-//            Material material = event.getCurrentItem().getType();
-//            if(event.getClickedInventory() == view.getBottomInventory()){
-//                region.addBlock(material, 1);
-//            } else{
-//                switch (event.getClick()) {
-//                    case LEFT:
-//                        region.removeBlock(material);
-//                        break;
-//                    case RIGHT:
-//                        playersSettingFre.put(event.getWhoClicked().getUniqueId(), new Pair<>(id, material));
-//                        event.getWhoClicked().closeInventory();
-//                        event.getWhoClicked().sendMessage("블럭의 빈도를 입력해주세요.");
-//                        return;
-//                    default:
-//                        return;
-//                }
-//            }
-//
-//            inventory.clear();
-//            Material[] materials = region.getMaterials();
-//            for(Material m : materials) {
-//
-//                ItemStack item = new ItemStack(m);
-//                ItemMeta meta = item.getItemMeta();
-//                meta.setLore(Collections.singletonList("빈도: " + region.getFrequency(m)));
-//                item.setItemMeta(meta);
-//
-//                inventory.addItem(item);
-//            }
-//        }
-//    }
     //좌표 지정 함수
     private void appointLocation(Player player, Location location, int index) {
         UUID uuid = player.getUniqueId();

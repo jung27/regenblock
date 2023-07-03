@@ -23,13 +23,19 @@ public abstract class InventoryGUI implements InventoryHandler{
     }
 
     public void decorate(Player player){
-        this.buttonMap.forEach((slot, button) -> inventory.setItem(slot, button.getIconCreator().apply(player)));
+        this.buttonMap.forEach((slot, button) -> this.inventory.setItem(slot, button.getIconCreator().apply(player)));
+    }
+
+    public void reload(Player player) {
+        this.buttonMap.clear();
+        this.inventory.clear();
+        this.decorate(player);
     }
 
     @Override
     public void onClick(InventoryClickEvent event) {
         event.setCancelled(true);
-        int slot = event.getSlot();
+        int slot = event.getRawSlot();
         InventoryButton button = this.buttonMap.get(slot);
         if(button != null) {
             button.getEventConsumer().accept(event);
