@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 public class Region implements Cloneable {
     private final Location startLocation;
     private final Location endLocation;
-    private final String id;
+    private String id;
     private final LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>();
     public static ArrayList<Region> regions = new ArrayList<>();
     private Long regenDelay = 20L;
@@ -92,6 +92,15 @@ public class Region implements Cloneable {
             }
         }
         return null;
+    }
+
+    public void setId(String id) {
+        for (Region region : regions) {
+            if (region.getId().equals(id)) {
+                throw new IllegalArgumentException("Region with id " + id + " already exists");
+            }
+        }
+        this.id = id;
     }
 
     public static void regenBlock(Location loc){
