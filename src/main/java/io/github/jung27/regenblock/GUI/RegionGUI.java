@@ -36,6 +36,20 @@ public class RegionGUI extends InventoryGUI {
                     GUIManager.getInstance().openGUI(new BlockGUI(region), player);
                 })
         );
+        addButton(1, new InventoryButton()
+                .creator(p -> {
+                    ItemStack item = new ItemStack(Material.BARRIER);
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName("삭제");
+                    item.setItemMeta(meta);
+                    return item;
+                })
+                .consumer(event -> {
+                    Region.regions.remove(region);
+                    player.closeInventory();
+                    GUIManager.getInstance().openGUI(new RegionListGUI(), player);
+                })
+        );
 
         super.decorate(player);
     }

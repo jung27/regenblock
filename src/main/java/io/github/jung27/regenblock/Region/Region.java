@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class Region{
+public class Region implements Cloneable {
     private final Location startLocation;
     private final Location endLocation;
     private final String id;
@@ -105,5 +105,15 @@ public class Region{
                 return;
             }
         }
+    }
+
+    public Region clone() {
+        Region clone = null;
+        try {
+            clone = (Region) super.clone();
+        } catch(CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return clone;
     }
 }
