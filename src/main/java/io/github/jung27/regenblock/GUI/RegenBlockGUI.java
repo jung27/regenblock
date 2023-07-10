@@ -19,7 +19,7 @@ public class RegenBlockGUI extends InventoryGUI {
     }
 
     @Override
-    public void decorate(Player player) {
+    public void decorate(Player player)  {
         int inventorySize = this.getInventory().getSize();
 
         for(int i = 0; i < inventorySize; i++) {
