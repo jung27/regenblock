@@ -1,7 +1,7 @@
 package io.github.jung27.regenblock.Command.SubCommands;
 
 import io.github.jung27.regenblock.Command.SubCommand;
-import io.github.jung27.regenblock.RegenBlock;
+import io.github.jung27.regenblock.Appointor.CreateAppointor;
 import org.bukkit.entity.Player;
 
 public class AppointCommand extends SubCommand {
@@ -29,6 +29,7 @@ public class AppointCommand extends SubCommand {
 
         player.sendMessage("좌클릭과 우클릭으로 두 지점을 지정해주세요.");
 
-        RegenBlock.instance().getRegenBlockEventListener().addAppointingPlayer(player, args[1]);
+        CreateAppointor appointor = new CreateAppointor(player, args[1]);
+        appointor.run();
     }
 }

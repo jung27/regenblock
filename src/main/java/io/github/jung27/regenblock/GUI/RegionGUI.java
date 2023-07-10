@@ -2,6 +2,7 @@ package io.github.jung27.regenblock.GUI;
 
 import io.github.jung27.regenblock.Conversation.RegenDelayPrompt;
 import io.github.jung27.regenblock.Conversation.IdPrompt;
+import io.github.jung27.regenblock.Appointor.ModifyAppointor;
 import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.Inventory.InventoryButton;
 import io.github.jung27.regenblock.Inventory.InventoryGUI;
@@ -9,6 +10,7 @@ import io.github.jung27.regenblock.RegenBlock;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class RegionGUI extends InventoryGUI {
@@ -107,7 +110,28 @@ public class RegionGUI extends InventoryGUI {
                     player.closeInventory();
                 })
         );
+        addButton(5, new InventoryButton()
+                .creator(p -> {
+                    ItemStack item = new ItemStack(Material.MAP);
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName(ChatColor.WHITE + "구역 재설정");
+                    meta.setLore(Arrays.asList(ChatColor.YELLOW + "시작 위치: " + l2s(region.getStartLocation()), ChatColor.YELLOW + "끝 위치: " + l2s(region.getEndLocation())));
+                    item.setItemMeta(meta);
+                    return item;
+                })
+                .consumer(event -> {
+                    player.sendMessage("좌클릭과 우클릭으로 두 지점을 지정해주세요.");
+
+                    ModifyAppointor appointor = new ModifyAppointor(player, region.getId());
+                    appointor.run();
+                    player.closeInventory();
+                })
+        );
 
         super.decorate(player);
+    }
+
+    String l2s(Location location) {
+        return "("+location.getWorld().getName() + ", " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()+")";
     }
 }

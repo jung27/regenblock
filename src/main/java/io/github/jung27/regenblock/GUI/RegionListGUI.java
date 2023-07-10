@@ -5,6 +5,7 @@ import io.github.jung27.regenblock.Inventory.InventoryButton;
 import io.github.jung27.regenblock.Inventory.InventoryGUI;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -31,7 +32,7 @@ public class RegionListGUI extends InventoryGUI {
                     .creator(p -> {
                         ItemStack item = new ItemStack(Material.PAPER);
                         ItemMeta itemMeta = item.getItemMeta();
-                        itemMeta.setDisplayName(region.getId());
+                        itemMeta.setDisplayName(ChatColor.WHITE+ region.getId());
                         item.setItemMeta(itemMeta);
                         return item;
                     })

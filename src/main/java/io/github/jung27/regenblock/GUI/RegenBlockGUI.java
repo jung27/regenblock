@@ -4,11 +4,13 @@ import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.Inventory.InventoryButton;
 import io.github.jung27.regenblock.Inventory.InventoryGUI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class RegenBlockGUI extends InventoryGUI {
     @Override
@@ -27,7 +29,13 @@ public class RegenBlockGUI extends InventoryGUI {
         }
 
         InventoryButton listBtn = new InventoryButton()
-                .creator(p -> new ItemStack(Material.BOOK))
+                .creator(p -> {
+                    ItemStack stack = new ItemStack(Material.BOOK);
+                    ItemMeta meta = stack.getItemMeta();
+                    meta.setDisplayName(ChatColor.WHITE + "리젠지역 목록");
+                    stack.setItemMeta(meta);
+                    return stack;
+                })
                 .consumer(event -> GUIManager.getInstance().openGUI(new RegionListGUI(), player));
 
         addButton(10, listBtn);

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Region implements Cloneable {
-    private final Location startLocation;
-    private final Location endLocation;
+    private Location startLocation;
+    private Location endLocation;
     private String id;
     private final LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>();
     public static ArrayList<Region> regions = new ArrayList<>();
@@ -27,9 +27,15 @@ public class Region implements Cloneable {
     public Location getStartLocation() {
         return startLocation;
     }
+    public void setStartLocation(Location startLocation) {
+        this.startLocation = startLocation;
+    }
 
     public Location getEndLocation() {
         return endLocation;
+    }
+    public void setEndLocation(Location endLocation) {
+        this.endLocation = endLocation;
     }
 
     public String getId() {
