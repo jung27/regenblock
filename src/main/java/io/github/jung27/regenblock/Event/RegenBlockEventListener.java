@@ -7,10 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -58,11 +55,13 @@ public class RegenBlockEventListener implements Listener {
         }
 
         //블럭 리젠
-        Region.regenBlock(blockLocation);
+        Region region = Region.regenBlock(blockLocation);
+        if(region != null && !region.isExpDrop()) {
+            event.setExpToDrop(0);
+        }
     }
-
     @EventHandler
-    public void  onBlockExplode(BlockExplodeEvent event) {
+    public void onBlockExplode(BlockExplodeEvent event) {
         event.blockList().forEach(block -> Region.regenBlock(block.getLocation()));
     }
     @EventHandler

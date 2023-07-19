@@ -1,6 +1,7 @@
 package io.github.jung27.regenblock.Appointor;
 
 import io.github.jung27.regenblock.Region.Region;
+import io.github.jung27.regenblock.Setting.GlobalSetting;
 import org.bukkit.entity.Player;
 
 public class ModifyAppointor extends Appointor{
@@ -20,5 +21,6 @@ public class ModifyAppointor extends Appointor{
 
         region.setStartLocation(locations[0]);
         region.setEndLocation(locations[1]);
+        if(GlobalSetting.getInstance().isAutoFill()) region.regenAll();
     }
 }

@@ -12,9 +12,10 @@ public class Region implements Cloneable {
     private Location startLocation;
     private Location endLocation;
     private String id;
-    private final LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>();
+    private LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>();
     public static ArrayList<Region> regions = new ArrayList<>();
     private Long regenDelay = 20L;
+    private boolean expDrop = true;
 
     public Region(Location start, Location end, String id) {
         this.startLocation = start;
@@ -59,7 +60,7 @@ public class Region implements Cloneable {
                 return material;
             }
         }
-        return RegenMaterial.get(Material.AIR);
+        return null;
     }
     public int getFrequency(RegenMaterial material) {
         return frequencies.get(material);
@@ -109,26 +110,62 @@ public class Region implements Cloneable {
         this.id = id;
     }
 
-    public static void regenBlock(Location loc){
+    private void setFrequencies(LinkedHashMap<RegenMaterial, Integer> frequencies) {
+        this.frequencies = frequencies;
+    }
+
+    public boolean isExpDrop() {
+        return expDrop;
+    }
+
+    public void setExpDrop(boolean expDrop) {
+        this.expDrop = expDrop;
+    }
+    public void regenAll(){
+        //시작 지점부터 끝 지점까지 모두 리젠
+        for(int x = Math.min(startLocation.getBlockX(), endLocation.getBlockX()); x <= Math.max(startLocation.getBlockX(), endLocation.getBlockX()); x++){
+            for(int y = Math.min(startLocation.getBlockY(), endLocation.getBlockY()); y <= Math.max(startLocation.getBlockY(), endLocation.getBlockY()); y++){
+                for(int z = Math.min(startLocation.getBlockZ(), endLocation.getBlockZ()); z <= Math.max(startLocation.getBlockZ(), endLocation.getBlockZ()); z++){
+                    Location loc = new Location(startLocation.getWorld(), x, y, z);
+                    regenBlock(loc);
+                }
+            }
+        }
+    }
+    public static Region regenBlock(Location loc){
         for (Region region : regions) {
+            if(region.frequencies.size() == 0) return null;
             if (region.isInside(loc)) {
                 Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
                     RegenMaterial m = region.getMaterial();
                     loc.getBlock().setType(m.getMaterial());
                     loc.getBlock().setData(m.getData());
                 }, region.getRegenDelay());
-                return;
+                return region;
             }
         }
+        return null;
     }
 
     public Region clone() {
-        Region clone = null;
+        System.out.println(regions.size());
+        Object obj = null;
         try {
-            clone = (Region) super.clone();
+            obj = super.clone();
         } catch(CloneNotSupportedException e) {
             e.printStackTrace();
         }
-        return clone;
+        Region region = (Region) obj;
+        if(region == null) return null;
+        region.setStartLocation(startLocation.clone());
+        region.setEndLocation(endLocation.clone());
+        LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>(this.frequencies);
+        region.setFrequencies(frequencies);
+        region.setId(id+" (복사본)");
+        regions.add(region);
+
+        System.out.println(regions.size());
+
+        return region;
     }
 }

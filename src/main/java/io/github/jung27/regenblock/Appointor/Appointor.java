@@ -1,6 +1,7 @@
 package io.github.jung27.regenblock.Appointor;
 
 import io.github.jung27.regenblock.RegenBlock;
+import io.github.jung27.regenblock.Setting.GlobalSetting;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

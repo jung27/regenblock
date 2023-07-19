@@ -70,7 +70,8 @@ public class RegionGUI extends InventoryGUI {
                     return item;
                 })
                 .consumer(event -> {
-                    player.sendMessage("준비중인 기능입니다!");
+                    region.clone();
+                    player.sendMessage(ChatColor.GREEN + "복제되었습니다.");
                 })
         );
         addButton(3, new InventoryButton()
@@ -125,6 +126,21 @@ public class RegionGUI extends InventoryGUI {
                     ModifyAppointor appointor = new ModifyAppointor(player, region.getId());
                     appointor.run();
                     player.closeInventory();
+                })
+        );
+        addButton(6, new InventoryButton()
+                .creator(p -> {
+                    ItemStack item = new ItemStack(Material.EXP_BOTTLE);
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName(ChatColor.WHITE + "레벨 지급");
+                    meta.setLore(Collections.singletonList(ChatColor.YELLOW + ((region.isExpDrop()) ? "ON" : "OFF")));
+                    item.setItemMeta(meta);
+                    return item;
+                })
+                .consumer(event -> {
+                    region.setExpDrop(!region.isExpDrop());
+                    player.sendMessage(ChatColor.GREEN + "레벨 지급이 " + ((region.isExpDrop()) ? "ON" : "OFF") + "으로 변경되었습니다.");
+                    reload(player);
                 })
         );
 

@@ -38,7 +38,18 @@ public class RegenBlockGUI extends InventoryGUI {
                 })
                 .consumer(event -> GUIManager.getInstance().openGUI(new RegionListGUI(), player));
 
+        InventoryButton globalSetting = new InventoryButton()
+                .creator(p -> {
+                    ItemStack stack = new ItemStack(Material.NETHER_STAR);
+                    ItemMeta meta = stack.getItemMeta();
+                    meta.setDisplayName(ChatColor.WHITE + "전역 설정");
+                    stack.setItemMeta(meta);
+                    return stack;
+                })
+                .consumer(event -> GUIManager.getInstance().openGUI(new GlobalSettingGUI(), player));
+
         addButton(10, listBtn);
+        addButton(12, globalSetting);
 
         super.decorate(player);
     }
