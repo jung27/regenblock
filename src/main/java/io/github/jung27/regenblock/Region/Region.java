@@ -3,7 +3,6 @@ package io.github.jung27.regenblock.Region;
 import io.github.jung27.regenblock.RegenBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,7 +13,7 @@ public class Region implements Cloneable {
     private String id;
     private LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>();
     public static ArrayList<Region> regions = new ArrayList<>();
-    private Long regenDelay = 20L;
+    private long regenDelay = 20L;
     private boolean expDrop = true;
 
     public Region(Location start, Location end, String id) {
@@ -30,6 +29,10 @@ public class Region implements Cloneable {
     }
     public void setStartLocation(Location startLocation) {
         this.startLocation = startLocation;
+    }
+
+    public LinkedHashMap<RegenMaterial, Integer> getFrequencies() {
+        return frequencies;
     }
 
     public Location getEndLocation() {

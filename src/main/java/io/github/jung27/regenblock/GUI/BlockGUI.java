@@ -81,7 +81,21 @@ public class BlockGUI extends InventoryGUI {
                     reload(player);
                 }));
 
-        if((currentPage+1)*(inventorySize-9) < Region.regions.size()) addButton(inventorySize-1, new InventoryButton()
+        addButton(inventorySize-5, new InventoryButton()
+                .creator(p -> {
+                    ItemStack item = new ItemStack(Material.BARRIER);
+                    ItemMeta itemMeta = item.getItemMeta();
+                    itemMeta.setDisplayName(ChatColor.RED + "닫기");
+                    item.setItemMeta(itemMeta);
+                    return item;
+                })
+                .consumer(event -> {
+                    player.closeInventory();
+                    GUIManager.getInstance().openGUI(new RegionGUI(region), player);
+                }));
+
+        System.out.println((currentPage+1)*(inventorySize-9) + "," + region.getFrequencies().size());
+        if((currentPage+1)*(inventorySize-9) <= region.getFrequencies().size()) addButton(inventorySize-1, new InventoryButton()
                 .creator(p -> new ItemStack(Material.ARROW))
                 .consumer(event -> {
                     currentPage++;

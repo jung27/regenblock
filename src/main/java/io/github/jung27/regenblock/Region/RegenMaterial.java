@@ -37,8 +37,15 @@ public class RegenMaterial {
     @Override
     public String toString() {
         return "RegenMaterial{" +
-                "material=" + material +
+                "material=" + material.name() +
                 ", data=" + data +
                 '}';
+    }
+
+    public static RegenMaterial parse(String string) {
+        String[] split = string.split("=");
+        String material = split[1].split(",")[0];
+        String data = split[2].split("}")[0];
+        return get(Material.valueOf(material), Byte.parseByte(data));
     }
 }

@@ -49,7 +49,7 @@ public class RegionGUI extends InventoryGUI {
         );
         addButton(1, new InventoryButton()
                 .creator(p -> {
-                    ItemStack item = new ItemStack(Material.BARRIER);
+                    ItemStack item = new ItemStack(Material.LAVA_BUCKET);
                     ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName(ChatColor.WHITE + "삭제");
                     item.setItemMeta(meta);
@@ -141,6 +141,19 @@ public class RegionGUI extends InventoryGUI {
                     region.setExpDrop(!region.isExpDrop());
                     player.sendMessage(ChatColor.GREEN + "레벨 지급이 " + ((region.isExpDrop()) ? "ON" : "OFF") + "으로 변경되었습니다.");
                     reload(player);
+                })
+        );
+        addButton(8, new InventoryButton()
+                .creator(p -> {
+                    ItemStack item = new ItemStack(Material.BARRIER);
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName(ChatColor.RED + "닫기");
+                    item.setItemMeta(meta);
+                    return item;
+                })
+                .consumer(event -> {
+                    player.closeInventory();
+                    GUIManager.getInstance().openGUI(new RegionListGUI(), player);
                 })
         );
 

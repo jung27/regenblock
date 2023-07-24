@@ -12,6 +12,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collections;
+
 public class RegionListGUI extends InventoryGUI {
     private int currentPage = 0;
 
@@ -45,6 +47,19 @@ public class RegionListGUI extends InventoryGUI {
                 .consumer(event -> {
                     currentPage--;
                     reload(player);
+                }));
+
+        addButton(inventorySize-5, new InventoryButton()
+                .creator(p -> {
+                    ItemStack item = new ItemStack(Material.BARRIER);
+                    ItemMeta itemMeta = item.getItemMeta();
+                    itemMeta.setDisplayName(ChatColor.RED + "닫기");
+                    item.setItemMeta(itemMeta);
+                    return item;
+                })
+                .consumer(event -> {
+                    player.closeInventory();
+                    GUIManager.getInstance().openGUI(new RegenBlockGUI(), player);
                 }));
 
         if((currentPage+1)*(inventorySize-9) < Region.regions.size()) addButton(inventorySize-1, new InventoryButton()
