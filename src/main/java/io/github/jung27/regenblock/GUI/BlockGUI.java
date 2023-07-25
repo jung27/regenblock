@@ -5,7 +5,7 @@ import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.Inventory.InventoryButton;
 import io.github.jung27.regenblock.Inventory.InventoryGUI;
 import io.github.jung27.regenblock.RegenBlock;
-import io.github.jung27.regenblock.Region.RegenMaterial;
+import io.github.jung27.regenblock.RegenMaterial.RegenMaterial;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,9 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 public class BlockGUI extends InventoryGUI {

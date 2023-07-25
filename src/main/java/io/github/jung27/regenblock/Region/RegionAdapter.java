@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import io.github.jung27.regenblock.RegenMaterial.RegenMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 

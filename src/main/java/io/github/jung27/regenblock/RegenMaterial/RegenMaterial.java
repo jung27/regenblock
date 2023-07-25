@@ -1,4 +1,4 @@
-package io.github.jung27.regenblock.Region;
+package io.github.jung27.regenblock.RegenMaterial;
 
 import org.bukkit.Material;
 

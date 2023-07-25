@@ -1,6 +1,7 @@
 package io.github.jung27.regenblock.Region;
 
 import io.github.jung27.regenblock.RegenBlock;
+import io.github.jung27.regenblock.RegenMaterial.RegenMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 

@@ -2,7 +2,7 @@ package io.github.jung27.regenblock.Conversation;
 
 import io.github.jung27.regenblock.GUI.BlockGUI;
 import io.github.jung27.regenblock.Inventory.GUIManager;
-import io.github.jung27.regenblock.Region.RegenMaterial;
+import io.github.jung27.regenblock.RegenMaterial.RegenMaterial;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
