@@ -72,6 +72,12 @@ public class RegenBlockEventListener implements Listener {
         }
     }
     @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if(Region.getRegionByLocation(event.getBlock().getLocation()) != null) {
+            event.setCancelled(true);
+        }
+    }
+    @EventHandler
     public void onBlockExplode(BlockExplodeEvent event) {
         event.blockList().forEach(block -> Region.regenBlock(block.getLocation()));
     }

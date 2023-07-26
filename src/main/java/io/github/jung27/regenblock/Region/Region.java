@@ -140,18 +140,24 @@ public class Region implements Cloneable {
         }
     }
     public static Region regenBlock(Location loc){
+        Region region = getRegionByLocation(loc);
+        if (region == null) return null;
+        Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
+            XMaterial m = region.getMaterial();
+            Block block = loc.getBlock();
+            block.setType(m.parseMaterial());
+            BlockState state = block.getState();
+            MaterialData data = state.getData();
+            data.setData(m.getData());
+            state.update();
+        }, region.getRegenDelay());
+        return region;
+    }
+
+    public static Region getRegionByLocation(Location loc){
         for (Region region : regions) {
             if(region.frequencies.size() == 0) return null;
             if (region.isInside(loc)) {
-                Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
-                    XMaterial m = region.getMaterial();
-                    Block block = loc.getBlock();
-                    block.setType(m.parseMaterial());
-                    BlockState state = block.getState();
-                    MaterialData data = state.getData();
-                    data.setData(m.getData());
-                    state.update();
-                }, region.getRegenDelay());
                 return region;
             }
         }
