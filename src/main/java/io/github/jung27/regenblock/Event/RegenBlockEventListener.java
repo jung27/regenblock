@@ -64,7 +64,8 @@ public class RegenBlockEventListener implements Listener {
             if(!region.isExpDrop()){
                 event.setExpToDrop(0);
             }
-            if(!globalSetting.isAutoPickup()){
+            if(globalSetting.isAutoPickup()){
+                event.setDropItems(false);
                 Collection<ItemStack> drops = event.getBlock().getDrops(player.getInventory().getItemInMainHand());
                 player.getInventory().addItem(drops.toArray(new ItemStack[0]));
             }

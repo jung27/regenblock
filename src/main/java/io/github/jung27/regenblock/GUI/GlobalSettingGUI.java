@@ -37,11 +37,13 @@ public class GlobalSettingGUI extends InventoryGUI {
                     globalSetting.setAutoFill(!globalSetting.isAutoFill());
                     reload(player);
                 })
+        );
 
+        addButton(1, new InventoryButton()
                 .creator(p -> {
                     ItemStack item = XMaterial.LEAD.parseItem();
                     ItemMeta meta = item.getItemMeta();
-                    meta.setDisplayName(ChatColor.WHITE + "자동 줍기: " + (globalSetting.isAutoFill()? "ON" : "OFF"));
+                    meta.setDisplayName(ChatColor.WHITE + "자동 줍기: " + (globalSetting.isAutoPickup()? "ON" : "OFF"));
                     meta.setLore(Collections.singletonList(ChatColor.YELLOW + "채굴 시 드롭 아이템이 자동으로 인벤토리에 지급됩니다."));
                     item.setItemMeta(meta);
                     return item;
