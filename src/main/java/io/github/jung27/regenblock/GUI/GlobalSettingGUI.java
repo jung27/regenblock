@@ -1,5 +1,6 @@
 package io.github.jung27.regenblock.GUI;
 
+import com.cryptomorin.xseries.XMaterial;
 import io.github.jung27.regenblock.Inventory.InventoryButton;
 import io.github.jung27.regenblock.Inventory.InventoryGUI;
 import io.github.jung27.regenblock.Setting.GlobalSetting;
@@ -34,6 +35,19 @@ public class GlobalSettingGUI extends InventoryGUI {
                 })
                 .consumer(event -> {
                     globalSetting.setAutoFill(!globalSetting.isAutoFill());
+                    reload(player);
+                })
+
+                .creator(p -> {
+                    ItemStack item = XMaterial.LEAD.parseItem();
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName(ChatColor.WHITE + "자동 줍기: " + (globalSetting.isAutoFill()? "ON" : "OFF"));
+                    meta.setLore(Collections.singletonList(ChatColor.YELLOW + "채굴 시 드롭 아이템이 자동으로 인벤토리에 지급됩니다."));
+                    item.setItemMeta(meta);
+                    return item;
+                })
+                .consumer(event -> {
+                    globalSetting.setAutoPickup(!globalSetting.isAutoPickup());
                     reload(player);
                 })
         );
