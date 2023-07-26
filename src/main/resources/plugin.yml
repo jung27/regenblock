@@ -1,5 +1,6 @@
 name: RegenBlock
 version: '${version}'
 main: io.github.jung27.regenblock.RegenBlock
+api-version: 1.13
 commands:
   regenblock:

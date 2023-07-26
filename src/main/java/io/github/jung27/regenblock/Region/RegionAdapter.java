@@ -1,12 +1,12 @@
 package io.github.jung27.regenblock.Region;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import io.github.jung27.regenblock.RegenMaterial.RegenMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -24,8 +24,8 @@ public class RegionAdapter extends TypeAdapter<Region> {
         Location endLocation = value.getEndLocation();
 
         LinkedHashMap<String, Integer> frequencies = new LinkedHashMap<>();
-        for (Map.Entry<RegenMaterial, Integer> entry : value.getFrequencies().entrySet()) {
-            frequencies.put(entry.getKey().toString(), entry.getValue());
+        for (Map.Entry<XMaterial, Integer> entry : value.getFrequencies().entrySet()) {
+            frequencies.put(entry.getKey().name(), entry.getValue());
         }
 
         out.beginObject();
@@ -51,7 +51,7 @@ public class RegionAdapter extends TypeAdapter<Region> {
         String id = null;
         Location startLocation = null;
         Location endLocation = null;
-        LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>();
+        LinkedHashMap<XMaterial, Integer> frequencies = new LinkedHashMap<>();
         long regenDelay = 20L;
         boolean expDrop = true;
 
@@ -74,7 +74,7 @@ public class RegionAdapter extends TypeAdapter<Region> {
                     Gson gson = new Gson();
                     LinkedHashMap<String, Integer> sil = gson.fromJson(in.nextString(), new TypeToken<LinkedHashMap<String, Integer>>(){}.getType());
                     for (Map.Entry<String, Integer> entry : sil.entrySet()) {
-                        frequencies.put(RegenMaterial.parse(entry.getKey()), entry.getValue());
+                        frequencies.put(XMaterial.valueOf(entry.getKey()), entry.getValue());
                     }
                     break;
                 case "regenDelay":
@@ -90,7 +90,7 @@ public class RegionAdapter extends TypeAdapter<Region> {
         }
         in.endObject();
         Region region = new Region(startLocation, endLocation, id);
-        for(Map.Entry<RegenMaterial, Integer> entry : frequencies.entrySet()) {
+        for(Map.Entry<XMaterial, Integer> entry : frequencies.entrySet()) {
             region.setFrequency(entry.getKey(), entry.getValue());
         }
         region.setRegenDelay(regenDelay);

@@ -1,11 +1,11 @@
 package io.github.jung27.regenblock.GUI;
 
+import com.cryptomorin.xseries.XMaterial;
 import io.github.jung27.regenblock.Conversation.FrequencyPrompt;
 import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.Inventory.InventoryButton;
 import io.github.jung27.regenblock.Inventory.InventoryGUI;
 import io.github.jung27.regenblock.RegenBlock;
-import io.github.jung27.regenblock.RegenMaterial.RegenMaterial;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,15 +36,15 @@ public class BlockGUI extends InventoryGUI {
     @Override
     public void decorate(Player player){
         int inventorySize = this.getInventory().getSize();
-        RegenMaterial[] materials = region.getMaterials();
+        XMaterial[] materials = region.getMaterials();
 
         for(int i = 0; i < inventorySize-9; i++) {
             int index = currentPage*(inventorySize-9)+i;
             if(index >= materials.length) break;
-            RegenMaterial m = materials[index];
+            XMaterial m = materials[index];
             addButton(i, new InventoryButton()
                     .creator(p -> {
-                        ItemStack item = new ItemStack(m.getMaterial(), 1, m.getData());
+                        ItemStack item = m.parseItem();
                         ItemMeta itemMeta = item.getItemMeta();
                         itemMeta.setLore(Collections.singletonList(ChatColor.YELLOW + "빈도: " + region.getFrequency(m)));
                         item.setItemMeta(itemMeta);
@@ -108,8 +108,9 @@ public class BlockGUI extends InventoryGUI {
         super.onClick(event);
         InventoryView view = event.getView();
         ItemStack item = event.getCurrentItem();
-        RegenMaterial material = RegenMaterial.get(item.getType(), item.getData().getData());
-        if (event.getClickedInventory() == view.getBottomInventory()) {
+        if (item == null) return;
+        XMaterial material = XMaterial.matchXMaterial(item);
+        if (event.getClickedInventory() == view.getBottomInventory() && material.parseMaterial().isBlock()) {
             region.addBlock(material, 1);
             reload((Player) event.getWhoClicked());
         }

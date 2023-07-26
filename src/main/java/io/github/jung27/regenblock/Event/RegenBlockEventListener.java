@@ -3,6 +3,7 @@ package io.github.jung27.regenblock.Event;
 import io.github.jung27.regenblock.Appointor.Appointor;
 import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.Region.Region;
+import io.github.jung27.regenblock.Setting.GlobalSetting;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,12 +13,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class RegenBlockEventListener implements Listener {
-    public final GUIManager guiManager = GUIManager.getInstance();
+    final GUIManager guiManager = GUIManager.getInstance();
+    final GlobalSetting globalSetting = GlobalSetting.getInstance();
     private final HashMap<UUID, Appointor> appointors = new HashMap<>();
     public void addAppointor(UUID uuid, Appointor appointor){
         appointors.put(uuid, appointor);
@@ -56,8 +60,14 @@ public class RegenBlockEventListener implements Listener {
 
         //블럭 리젠
         Region region = Region.regenBlock(blockLocation);
-        if(region != null && !region.isExpDrop()) {
-            event.setExpToDrop(0);
+        if(region != null) {
+            if(!region.isExpDrop()){
+                event.setExpToDrop(0);
+            }
+            if(!globalSetting.isAutoPickup()){
+                Collection<ItemStack> drops = event.getBlock().getDrops(player.getInventory().getItemInMainHand());
+                player.getInventory().addItem(drops.toArray(new ItemStack[0]));
+            }
         }
     }
     @EventHandler

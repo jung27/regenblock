@@ -1,5 +1,6 @@
 package io.github.jung27.regenblock.GUI;
 
+import com.cryptomorin.xseries.XMaterial;
 import io.github.jung27.regenblock.Conversation.RegenDelayPrompt;
 import io.github.jung27.regenblock.Conversation.IdPrompt;
 import io.github.jung27.regenblock.Appointor.ModifyAppointor;
@@ -36,7 +37,7 @@ public class RegionGUI extends InventoryGUI {
     public void decorate(Player player){
         addButton(0, new InventoryButton()
                 .creator(p -> {
-                    ItemStack item = new ItemStack(Material.GRASS);
+                    ItemStack item = XMaterial.GRASS_BLOCK.parseItem();
                     ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName(ChatColor.WHITE + "블럭");
                     item.setItemMeta(meta);
@@ -63,7 +64,7 @@ public class RegionGUI extends InventoryGUI {
         );
         addButton(2, new InventoryButton()
                 .creator(p -> {
-                    ItemStack item = new ItemStack(Material.TOTEM);
+                    ItemStack item = XMaterial.TOTEM_OF_UNDYING.parseItem();
                     ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName(ChatColor.WHITE + "복제");
                     item.setItemMeta(meta);
@@ -94,7 +95,7 @@ public class RegionGUI extends InventoryGUI {
         );
         addButton(4, new InventoryButton()
                 .creator(p -> {
-                    ItemStack item = new ItemStack(Material.WATCH);
+                    ItemStack item = XMaterial.CLOCK.parseItem();
                     ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName(ChatColor.WHITE + "리젠 딜레이 변경");
                     meta.setLore(Collections.singletonList(ChatColor.YELLOW + "현재 리젠 딜레이: " + region.getRegenDelay()));
@@ -113,7 +114,7 @@ public class RegionGUI extends InventoryGUI {
         );
         addButton(5, new InventoryButton()
                 .creator(p -> {
-                    ItemStack item = new ItemStack(Material.MAP);
+                    ItemStack item = XMaterial.MAP.parseItem();
                     ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName(ChatColor.WHITE + "구역 재설정");
                     meta.setLore(Arrays.asList(ChatColor.YELLOW + "시작 위치: " + l2s(region.getStartLocation()), ChatColor.YELLOW + "끝 위치: " + l2s(region.getEndLocation())));
@@ -130,7 +131,7 @@ public class RegionGUI extends InventoryGUI {
         );
         addButton(6, new InventoryButton()
                 .creator(p -> {
-                    ItemStack item = new ItemStack(Material.EXP_BOTTLE);
+                    ItemStack item = XMaterial.EXPERIENCE_BOTTLE.parseItem();
                     ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName(ChatColor.WHITE + "레벨 지급");
                     meta.setLore(Collections.singletonList(ChatColor.YELLOW + ((region.isExpDrop()) ? "ON" : "OFF")));

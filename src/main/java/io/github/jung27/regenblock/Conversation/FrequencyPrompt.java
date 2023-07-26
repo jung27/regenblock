@@ -1,8 +1,8 @@
 package io.github.jung27.regenblock.Conversation;
 
+import com.cryptomorin.xseries.XMaterial;
 import io.github.jung27.regenblock.GUI.BlockGUI;
 import io.github.jung27.regenblock.Inventory.GUIManager;
-import io.github.jung27.regenblock.RegenMaterial.RegenMaterial;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 
 public class FrequencyPrompt extends NumericPrompt {
     private final Region region;
-    private final RegenMaterial material;
-    public FrequencyPrompt(Region region, RegenMaterial material) {
+    private final XMaterial material;
+    public FrequencyPrompt(Region region, XMaterial material) {
         super();
         this.region = region;
         this.material = material;

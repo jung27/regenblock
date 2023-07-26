@@ -1,9 +1,12 @@
 package io.github.jung27.regenblock.Region;
 
+import com.cryptomorin.xseries.XMaterial;
 import io.github.jung27.regenblock.RegenBlock;
-import io.github.jung27.regenblock.RegenMaterial.RegenMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,7 +15,7 @@ public class Region implements Cloneable {
     private Location startLocation;
     private Location endLocation;
     private String id;
-    private LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>();
+    private LinkedHashMap<XMaterial, Integer> frequencies = new LinkedHashMap<>();
     public static ArrayList<Region> regions = new ArrayList<>();
     private long regenDelay = 20L;
     private boolean expDrop = true;
@@ -32,7 +35,7 @@ public class Region implements Cloneable {
         this.startLocation = startLocation;
     }
 
-    public LinkedHashMap<RegenMaterial, Integer> getFrequencies() {
+    public LinkedHashMap<XMaterial, Integer> getFrequencies() {
         return frequencies;
     }
 
@@ -46,11 +49,11 @@ public class Region implements Cloneable {
     public String getId() {
         return id;
     }
-    public RegenMaterial[] getMaterials() {
-        return frequencies.keySet().toArray(new RegenMaterial[0]);
+    public XMaterial[] getMaterials() {
+        return frequencies.keySet().toArray(new XMaterial[0]);
     }
 
-    public RegenMaterial getMaterial() {
+    public XMaterial getMaterial() {
         int total = 0;
         for (int frequency : frequencies.values()) {
             total += frequency;
@@ -58,7 +61,7 @@ public class Region implements Cloneable {
 
         int random = (int) (Math.random() * total);
         int sum = 0;
-        for (RegenMaterial material : frequencies.keySet()) {
+        for (XMaterial material : frequencies.keySet()) {
             sum += frequencies.get(material);
             if (random < sum) {
                 return material;
@@ -66,18 +69,18 @@ public class Region implements Cloneable {
         }
         return null;
     }
-    public int getFrequency(RegenMaterial material) {
+    public int getFrequency(XMaterial material) {
         return frequencies.get(material);
     }
 
-    public void setFrequency(RegenMaterial material, int frequency) {
+    public void setFrequency(XMaterial material, int frequency) {
         frequencies.put(material, frequency);
     }
 
-    public void addBlock(RegenMaterial material, int frequency) {
+    public void addBlock(XMaterial material, int frequency) {
         frequencies.put(material, frequency);
     }
-    public void removeBlock(RegenMaterial material) {
+    public void removeBlock(XMaterial material) {
         frequencies.remove(material);
     }
 
@@ -114,7 +117,7 @@ public class Region implements Cloneable {
         this.id = id;
     }
 
-    private void setFrequencies(LinkedHashMap<RegenMaterial, Integer> frequencies) {
+    private void setFrequencies(LinkedHashMap<XMaterial, Integer> frequencies) {
         this.frequencies = frequencies;
     }
 
@@ -141,9 +144,13 @@ public class Region implements Cloneable {
             if(region.frequencies.size() == 0) return null;
             if (region.isInside(loc)) {
                 Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
-                    RegenMaterial m = region.getMaterial();
-                    loc.getBlock().setType(m.getMaterial());
-                    loc.getBlock().setData(m.getData());
+                    XMaterial m = region.getMaterial();
+                    Block block = loc.getBlock();
+                    block.setType(m.parseMaterial());
+                    BlockState state = block.getState();
+                    MaterialData data = state.getData();
+                    data.setData(m.getData());
+                    state.update();
                 }, region.getRegenDelay());
                 return region;
             }
@@ -163,7 +170,7 @@ public class Region implements Cloneable {
         if(region == null) return null;
         region.setStartLocation(startLocation.clone());
         region.setEndLocation(endLocation.clone());
-        LinkedHashMap<RegenMaterial, Integer> frequencies = new LinkedHashMap<>(this.frequencies);
+        LinkedHashMap<XMaterial, Integer> frequencies = new LinkedHashMap<>(this.frequencies);
         region.setFrequencies(frequencies);
         region.setId(id+" (복사본)");
         regions.add(region);

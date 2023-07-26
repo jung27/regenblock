@@ -1,5 +1,6 @@
 package io.github.jung27.regenblock.GUI;
 
+import com.cryptomorin.xseries.XMaterial;
 import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.Inventory.InventoryButton;
 import io.github.jung27.regenblock.Inventory.InventoryGUI;
@@ -7,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,8 +23,7 @@ public class RegenBlockGUI extends InventoryGUI {
         int inventorySize = this.getInventory().getSize();
 
         for(int i = 0; i < inventorySize; i++) {
-            int color = i % 2 == 0? 7 : 5;
-            ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) color);
+            ItemStack itemStack = i % 2 == 0? XMaterial.BLACK_STAINED_GLASS_PANE.parseItem() : XMaterial.LIME_STAINED_GLASS_PANE.parseItem();
             this.getInventory().setItem(i, itemStack);
         }
 
