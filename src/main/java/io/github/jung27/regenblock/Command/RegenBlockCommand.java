@@ -2,8 +2,6 @@ package io.github.jung27.regenblock.Command;
 
 import io.github.jung27.regenblock.Command.SubCommands.AppointCommand;
 import io.github.jung27.regenblock.Command.SubCommands.GUICommand;
-import io.github.jung27.regenblock.Command.SubCommands.RemoveCommand;
-import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +16,6 @@ public class RegenBlockCommand implements CommandExecutor, TabCompleter {
 
     public RegenBlockCommand(){
         subCommands.add(new AppointCommand());
-        subCommands.add(new RemoveCommand());
         subCommands.add(new GUICommand());
     }
 
@@ -47,14 +44,6 @@ public class RegenBlockCommand implements CommandExecutor, TabCompleter {
                 subCommandNames.add(subCommand.getName());
             }
             return subCommandNames;
-        } else if(args.length == 2) {
-            if(args[0].equalsIgnoreCase("remove")) {
-                ArrayList<String> regionIds = new ArrayList<>();
-                for (Region region : Region.regions) {
-                    regionIds.add(region.getId());
-                }
-                return regionIds;
-            }
         }
         return null;
     }
