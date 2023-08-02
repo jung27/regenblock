@@ -4,3 +4,10 @@ main: io.github.jung27.regenblock.RegenBlock
 api-version: 1.13
 commands:
   regenblock:
+    aliases:
+      - rb
+    permission: regenblock.command
+permissions:
+  regenblock.command:
+    description: 플레이어가 /regenblock 명령어를 사용할 수 있도록 합니다.
+    default: op
