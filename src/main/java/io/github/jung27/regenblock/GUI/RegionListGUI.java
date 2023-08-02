@@ -1,12 +1,19 @@
 package io.github.jung27.regenblock.GUI;
 
+import com.cryptomorin.xseries.XMaterial;
+import io.github.jung27.regenblock.Appointor.CreateAppointor;
+import io.github.jung27.regenblock.Conversation.IdPrompt;
+import io.github.jung27.regenblock.Conversation.RegionPrompt;
 import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.Inventory.InventoryButton;
 import io.github.jung27.regenblock.Inventory.InventoryGUI;
+import io.github.jung27.regenblock.RegenBlock;
 import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -62,11 +69,31 @@ public class RegionListGUI extends InventoryGUI {
                     GUIManager.getInstance().openGUI(new RegenBlockGUI(), player);
                 }));
 
-        if((currentPage+1)*(inventorySize-9) < Region.regions.size()) addButton(inventorySize-1, new InventoryButton()
-                .creator(p -> new ItemStack(Material.ARROW))
+        if((currentPage+1)*(inventorySize-9) < Region.regions.size()) {
+            addButton(inventorySize - 1, new InventoryButton()
+                    .creator(p -> new ItemStack(Material.ARROW))
+                    .consumer(event -> {
+                        currentPage++;
+                        reload(player);
+                    }));
+        }
+
+        addButton(Region.regions.size()-(currentPage*inventorySize), new InventoryButton()
+                .creator(p -> {
+                    ItemStack item = XMaterial.WRITABLE_BOOK.parseItem();
+                    ItemMeta itemMeta = item.getItemMeta();
+                    itemMeta.setDisplayName(ChatColor.WHITE + "지역 생성");
+                    item.setItemMeta(itemMeta);
+                    return item;
+                })
                 .consumer(event -> {
-                    currentPage++;
-                    reload(player);
+                    ConversationFactory cf = new ConversationFactory(RegenBlock.instance());
+                    Conversation conv = cf
+                            .withFirstPrompt(new RegionPrompt())
+                            .withLocalEcho(false)
+                            .buildConversation((Player) event.getWhoClicked());
+                    conv.begin();
+                    player.closeInventory();
                 }));
 
 
