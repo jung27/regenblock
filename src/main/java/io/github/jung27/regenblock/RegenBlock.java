@@ -5,17 +5,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import io.github.jung27.regenblock.Command.RegenBlockCommand;
 import io.github.jung27.regenblock.Event.RegenBlockEventListener;
-import io.github.jung27.regenblock.Inventory.GUIManager;
 import io.github.jung27.regenblock.Region.Region;
 import io.github.jung27.regenblock.Region.RegionAdapter;
+import io.github.jung27.regenblock.Setting.GlobalSetting;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public final class RegenBlock extends JavaPlugin {
     private RegenBlockEventListener regenBlockEventListener;
+    private GlobalSetting globalSetting = GlobalSetting.getInstance();
     private static RegenBlock instance;
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting().registerTypeAdapter(Region.class, new RegionAdapter())
@@ -23,6 +23,8 @@ public final class RegenBlock extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        saveDefaultConfig();
+
         regenBlockEventListener = new RegenBlockEventListener();
 
         getServer().getPluginManager().registerEvents(regenBlockEventListener, this);
@@ -53,6 +55,10 @@ public final class RegenBlock extends JavaPlugin {
         } catch (IOException e) {
             getLogger().info("지역 저장 실패.");
         }
+
+        getConfig().set("auto-fill", globalSetting.isAutoFill());
+        getConfig().set("auto-pick-up", globalSetting.isAutoPickup());
+        saveConfig();
     }
 
     void load(){
@@ -65,6 +71,9 @@ public final class RegenBlock extends JavaPlugin {
         } catch (IOException e) {
             getLogger().info("지역 로드 실패.");
         }
+
+        globalSetting.setAutoFill(getConfig().getBoolean("auto-fill"));
+        globalSetting.setAutoPickup(getConfig().getBoolean("auto-pick-up"));
     }
 
     public static RegenBlock instance() {
