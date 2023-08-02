@@ -21,6 +21,7 @@ public abstract class Appointor {
         RegenBlock.instance().getRegenBlockEventListener().addAppointor(player.getUniqueId(), this);
     }
     public void appointFirst(Location loc){
+        System.out.println(isRunning);
         if (loc == null || !isRunning) return;
 
         locations[0] = loc;
@@ -35,9 +36,14 @@ public abstract class Appointor {
         if (locations[0] != null) appointComplete();
     }
     void appointComplete(){
+        stop();
+        System.out.println(isRunning);
+        appoint();
+    }
+
+    void stop(){
         isRunning = false;
         RegenBlock.instance().getRegenBlockEventListener().removeAppointor(player.getUniqueId());
-        appoint();
     }
 
     abstract void appoint();

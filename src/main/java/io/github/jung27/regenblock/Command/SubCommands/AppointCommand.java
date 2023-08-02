@@ -2,6 +2,7 @@ package io.github.jung27.regenblock.Command.SubCommands;
 
 import io.github.jung27.regenblock.Command.SubCommand;
 import io.github.jung27.regenblock.Appointor.CreateAppointor;
+import io.github.jung27.regenblock.Region.Region;
 import org.bukkit.entity.Player;
 
 public class AppointCommand extends SubCommand {
@@ -27,8 +28,13 @@ public class AppointCommand extends SubCommand {
             return;
         }
 
-        player.sendMessage("좌클릭과 우클릭으로 두 지점을 지정해주세요.");
 
+        if (Region.getRegion(args[1]) != null) {
+            player.sendMessage("이미 존재하는 id입니다.");
+            return;
+        }
+
+        player.sendMessage("좌클릭과 우클릭으로 두 지점을 지정해주세요.");
         CreateAppointor appointor = new CreateAppointor(player, args[1]);
         appointor.run();
     }
