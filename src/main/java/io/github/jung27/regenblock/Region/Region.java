@@ -1,6 +1,7 @@
 package io.github.jung27.regenblock.Region;
 
 import com.cryptomorin.xseries.XMaterial;
+import io.github.jung27.regenblock.Event.BlockRegenEvent;
 import io.github.jung27.regenblock.RegenBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -145,11 +146,15 @@ public class Region implements Cloneable {
         Bukkit.getScheduler().runTaskLater(RegenBlock.instance(), () -> {
             XMaterial m = region.getMaterial();
             Block block = loc.getBlock();
-            block.setType(m.parseMaterial());
-            BlockState state = block.getState();
-            MaterialData data = state.getData();
-            data.setData(m.getData());
-            state.update();
+            BlockRegenEvent event = new BlockRegenEvent(block, m.parseMaterial());
+            Bukkit.getPluginManager().callEvent(event);
+            if (!event.isCancelled())  {
+                block.setType(m.parseMaterial());
+                BlockState state = block.getState();
+                MaterialData data = state.getData();
+                data.setData(m.getData());
+                state.update();
+            }
         }, region.getRegenDelay());
         return region;
     }

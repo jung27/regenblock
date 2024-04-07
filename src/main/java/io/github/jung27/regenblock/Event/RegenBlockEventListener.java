@@ -101,4 +101,9 @@ public class RegenBlockEventListener implements Listener {
         event.setCancelled(true);
         appointor.appointSecond(location);
     }
+
+    @EventHandler
+    public void onBlockBurn(BlockBurnEvent event) {
+        Region.regenBlock(event.getBlock().getLocation());
+    }
 }
